@@ -1,0 +1,10 @@
+
+module TarsCppCIDemo
+{
+
+interface Hello
+{
+    int test();
+};
+
+}; 
