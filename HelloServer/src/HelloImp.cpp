@@ -6,7 +6,7 @@ using namespace std;
 //////////////////////////////////////////////////////
 void HelloImp::initialize()
 {
-    //initialize servant here:;
+    //initialize servant here:
     //...
 }
 
