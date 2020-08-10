@@ -8,6 +8,7 @@ void HelloImp::initialize()
 {
     //initialize servant here:
     //...
+    
 }
 
 //////////////////////////////////////////////////////
