@@ -10,7 +10,7 @@ include_directories(${GTEST_INCLUDE_DIRS}
         ${TARS_INC}
         ${PROJECT_SOURCE_DIR}/src )
 
-link_directories($TARS_LIB)
+link_directories(${TARS_LIB})
 
 add_executable(app_ut ${COUNTER_SRC} app_ut.cpp)
 
