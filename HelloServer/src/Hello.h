@@ -24,6 +24,21 @@ namespace TarsCppCIDemo
     {
     public:
         virtual ~HelloPrxCallback(){}
+        virtual void callback_decrement(tars::Int32 ret, tars::Int32 count)
+        { throw std::runtime_error("callback_decrement() override incorrect."); }
+        virtual void callback_decrement_exception(tars::Int32 ret)
+        { throw std::runtime_error("callback_decrement_exception() override incorrect."); }
+
+        virtual void callback_getCount(tars::Int32 ret, tars::Int32 count)
+        { throw std::runtime_error("callback_getCount() override incorrect."); }
+        virtual void callback_getCount_exception(tars::Int32 ret)
+        { throw std::runtime_error("callback_getCount_exception() override incorrect."); }
+
+        virtual void callback_increment(tars::Int32 ret, tars::Int32 count)
+        { throw std::runtime_error("callback_increment() override incorrect."); }
+        virtual void callback_increment_exception(tars::Int32 ret)
+        { throw std::runtime_error("callback_increment_exception() override incorrect."); }
+
         virtual void callback_test(tars::Int32 ret)
         { throw std::runtime_error("callback_test() override incorrect."); }
         virtual void callback_test_exception(tars::Int32 ret)
@@ -47,13 +62,100 @@ namespace TarsCppCIDemo
         {
             static ::std::string __Hello_all[]=
             {
+                "decrement",
+                "getCount",
+                "increment",
                 "test"
             };
-            pair<string*, string*> r = equal_range(__Hello_all, __Hello_all+1, string(msg->request.sFuncName));
+            pair<string*, string*> r = equal_range(__Hello_all, __Hello_all+4, string(msg->request.sFuncName));
             if(r.first == r.second) return tars::TARSSERVERNOFUNCERR;
             switch(r.first - __Hello_all)
             {
                 case 0:
+                {
+                    if (msg->response->iRet != tars::TARSSERVERSUCCESS)
+                    {
+                        callback_decrement_exception(msg->response->iRet);
+
+                        return msg->response->iRet;
+                    }
+                    tars::TarsInputStream<tars::BufferReader> _is;
+
+                    _is.setBuffer(msg->response->sBuffer);
+                    tars::Int32 _ret;
+                    _is.read(_ret, 0, true);
+
+                    tars::Int32 count;
+                    _is.read(count, 1, true);
+                    CallbackThreadData * pCbtd = CallbackThreadData::getData();
+                    assert(pCbtd != NULL);
+
+                    pCbtd->setResponseContext(msg->response->context);
+
+                    callback_decrement(_ret, count);
+
+                    pCbtd->delResponseContext();
+
+                    return tars::TARSSERVERSUCCESS;
+
+                }
+                case 1:
+                {
+                    if (msg->response->iRet != tars::TARSSERVERSUCCESS)
+                    {
+                        callback_getCount_exception(msg->response->iRet);
+
+                        return msg->response->iRet;
+                    }
+                    tars::TarsInputStream<tars::BufferReader> _is;
+
+                    _is.setBuffer(msg->response->sBuffer);
+                    tars::Int32 _ret;
+                    _is.read(_ret, 0, true);
+
+                    tars::Int32 count;
+                    _is.read(count, 1, true);
+                    CallbackThreadData * pCbtd = CallbackThreadData::getData();
+                    assert(pCbtd != NULL);
+
+                    pCbtd->setResponseContext(msg->response->context);
+
+                    callback_getCount(_ret, count);
+
+                    pCbtd->delResponseContext();
+
+                    return tars::TARSSERVERSUCCESS;
+
+                }
+                case 2:
+                {
+                    if (msg->response->iRet != tars::TARSSERVERSUCCESS)
+                    {
+                        callback_increment_exception(msg->response->iRet);
+
+                        return msg->response->iRet;
+                    }
+                    tars::TarsInputStream<tars::BufferReader> _is;
+
+                    _is.setBuffer(msg->response->sBuffer);
+                    tars::Int32 _ret;
+                    _is.read(_ret, 0, true);
+
+                    tars::Int32 count;
+                    _is.read(count, 1, true);
+                    CallbackThreadData * pCbtd = CallbackThreadData::getData();
+                    assert(pCbtd != NULL);
+
+                    pCbtd->setResponseContext(msg->response->context);
+
+                    callback_increment(_ret, count);
+
+                    pCbtd->delResponseContext();
+
+                    return tars::TARSSERVERSUCCESS;
+
+                }
+                case 3:
                 {
                     if (msg->response->iRet != tars::TARSSERVERSUCCESS)
                     {
@@ -101,14 +203,134 @@ namespace TarsCppCIDemo
         {
             static ::std::string __Hello_all[]=
             {
+                "decrement",
+                "getCount",
+                "increment",
                 "test"
             };
 
-            pair<string*, string*> r = equal_range(__Hello_all, __Hello_all+1, string(msg->request.sFuncName));
+            pair<string*, string*> r = equal_range(__Hello_all, __Hello_all+4, string(msg->request.sFuncName));
             if(r.first == r.second) return tars::TARSSERVERNOFUNCERR;
             switch(r.first - __Hello_all)
             {
                 case 0:
+                {
+                    if (msg->response->iRet != tars::TARSSERVERSUCCESS)
+                    {
+                        callback_decrement_exception(msg->response->iRet);
+
+                        return msg->response->iRet;
+                    }
+                    tars::TarsInputStream<tars::BufferReader> _is;
+
+                    _is.setBuffer(msg->response->sBuffer);
+                    try
+                    {
+                        tars::Int32 _ret;
+                        _is.read(_ret, 0, true);
+
+                        tars::Int32 count;
+                        _is.read(count, 1, true);
+                        setResponseContext(msg->response->context);
+
+                        callback_decrement(_ret, count);
+
+                    }
+                    catch(std::exception &ex)
+                    {
+                        callback_decrement_exception(tars::TARSCLIENTDECODEERR);
+
+                        return tars::TARSCLIENTDECODEERR;
+                    }
+                    catch(...)
+                    {
+                        callback_decrement_exception(tars::TARSCLIENTDECODEERR);
+
+                        return tars::TARSCLIENTDECODEERR;
+                    }
+
+                    return tars::TARSSERVERSUCCESS;
+
+                }
+                case 1:
+                {
+                    if (msg->response->iRet != tars::TARSSERVERSUCCESS)
+                    {
+                        callback_getCount_exception(msg->response->iRet);
+
+                        return msg->response->iRet;
+                    }
+                    tars::TarsInputStream<tars::BufferReader> _is;
+
+                    _is.setBuffer(msg->response->sBuffer);
+                    try
+                    {
+                        tars::Int32 _ret;
+                        _is.read(_ret, 0, true);
+
+                        tars::Int32 count;
+                        _is.read(count, 1, true);
+                        setResponseContext(msg->response->context);
+
+                        callback_getCount(_ret, count);
+
+                    }
+                    catch(std::exception &ex)
+                    {
+                        callback_getCount_exception(tars::TARSCLIENTDECODEERR);
+
+                        return tars::TARSCLIENTDECODEERR;
+                    }
+                    catch(...)
+                    {
+                        callback_getCount_exception(tars::TARSCLIENTDECODEERR);
+
+                        return tars::TARSCLIENTDECODEERR;
+                    }
+
+                    return tars::TARSSERVERSUCCESS;
+
+                }
+                case 2:
+                {
+                    if (msg->response->iRet != tars::TARSSERVERSUCCESS)
+                    {
+                        callback_increment_exception(msg->response->iRet);
+
+                        return msg->response->iRet;
+                    }
+                    tars::TarsInputStream<tars::BufferReader> _is;
+
+                    _is.setBuffer(msg->response->sBuffer);
+                    try
+                    {
+                        tars::Int32 _ret;
+                        _is.read(_ret, 0, true);
+
+                        tars::Int32 count;
+                        _is.read(count, 1, true);
+                        setResponseContext(msg->response->context);
+
+                        callback_increment(_ret, count);
+
+                    }
+                    catch(std::exception &ex)
+                    {
+                        callback_increment_exception(tars::TARSCLIENTDECODEERR);
+
+                        return tars::TARSCLIENTDECODEERR;
+                    }
+                    catch(...)
+                    {
+                        callback_increment_exception(tars::TARSCLIENTDECODEERR);
+
+                        return tars::TARSCLIENTDECODEERR;
+                    }
+
+                    return tars::TARSSERVERSUCCESS;
+
+                }
+                case 3:
                 {
                     if (msg->response->iRet != tars::TARSSERVERSUCCESS)
                     {
@@ -159,6 +381,105 @@ namespace TarsCppCIDemo
     {
     public:
         typedef map<string, string> TARS_CONTEXT;
+        tars::Int32 decrement(tars::Int32 &count,const map<string, string> &context = TARS_CONTEXT(),map<string, string> * pResponseContext = NULL)
+        {
+            tars::TarsOutputStream<tars::BufferWriterVector> _os;
+            _os.write(count, 1);
+            std::map<string, string> _mStatus;
+            shared_ptr<tars::ResponsePacket> rep = tars_invoke(tars::TARSNORMAL,"decrement", _os, context, _mStatus);
+            if(pResponseContext)
+            {
+                pResponseContext->swap(rep->context);
+            }
+
+            tars::TarsInputStream<tars::BufferReader> _is;
+            _is.setBuffer(rep->sBuffer);
+            tars::Int32 _ret;
+            _is.read(_ret, 0, true);
+            _is.read(count, 1, true);
+            return _ret;
+        }
+
+        void async_decrement(HelloPrxCallbackPtr callback,const map<string, string>& context = TARS_CONTEXT())
+        {
+            tars::TarsOutputStream<tars::BufferWriterVector> _os;
+            std::map<string, string> _mStatus;
+            tars_invoke_async(tars::TARSNORMAL,"decrement", _os, context, _mStatus, callback);
+        }
+        
+        void coro_decrement(HelloCoroPrxCallbackPtr callback,const map<string, string>& context = TARS_CONTEXT())
+        {
+            tars::TarsOutputStream<tars::BufferWriterVector> _os;
+            std::map<string, string> _mStatus;
+            tars_invoke_async(tars::TARSNORMAL,"decrement", _os, context, _mStatus, callback, true);
+        }
+
+        tars::Int32 getCount(tars::Int32 &count,const map<string, string> &context = TARS_CONTEXT(),map<string, string> * pResponseContext = NULL)
+        {
+            tars::TarsOutputStream<tars::BufferWriterVector> _os;
+            _os.write(count, 1);
+            std::map<string, string> _mStatus;
+            shared_ptr<tars::ResponsePacket> rep = tars_invoke(tars::TARSNORMAL,"getCount", _os, context, _mStatus);
+            if(pResponseContext)
+            {
+                pResponseContext->swap(rep->context);
+            }
+
+            tars::TarsInputStream<tars::BufferReader> _is;
+            _is.setBuffer(rep->sBuffer);
+            tars::Int32 _ret;
+            _is.read(_ret, 0, true);
+            _is.read(count, 1, true);
+            return _ret;
+        }
+
+        void async_getCount(HelloPrxCallbackPtr callback,const map<string, string>& context = TARS_CONTEXT())
+        {
+            tars::TarsOutputStream<tars::BufferWriterVector> _os;
+            std::map<string, string> _mStatus;
+            tars_invoke_async(tars::TARSNORMAL,"getCount", _os, context, _mStatus, callback);
+        }
+        
+        void coro_getCount(HelloCoroPrxCallbackPtr callback,const map<string, string>& context = TARS_CONTEXT())
+        {
+            tars::TarsOutputStream<tars::BufferWriterVector> _os;
+            std::map<string, string> _mStatus;
+            tars_invoke_async(tars::TARSNORMAL,"getCount", _os, context, _mStatus, callback, true);
+        }
+
+        tars::Int32 increment(tars::Int32 &count,const map<string, string> &context = TARS_CONTEXT(),map<string, string> * pResponseContext = NULL)
+        {
+            tars::TarsOutputStream<tars::BufferWriterVector> _os;
+            _os.write(count, 1);
+            std::map<string, string> _mStatus;
+            shared_ptr<tars::ResponsePacket> rep = tars_invoke(tars::TARSNORMAL,"increment", _os, context, _mStatus);
+            if(pResponseContext)
+            {
+                pResponseContext->swap(rep->context);
+            }
+
+            tars::TarsInputStream<tars::BufferReader> _is;
+            _is.setBuffer(rep->sBuffer);
+            tars::Int32 _ret;
+            _is.read(_ret, 0, true);
+            _is.read(count, 1, true);
+            return _ret;
+        }
+
+        void async_increment(HelloPrxCallbackPtr callback,const map<string, string>& context = TARS_CONTEXT())
+        {
+            tars::TarsOutputStream<tars::BufferWriterVector> _os;
+            std::map<string, string> _mStatus;
+            tars_invoke_async(tars::TARSNORMAL,"increment", _os, context, _mStatus, callback);
+        }
+        
+        void coro_increment(HelloCoroPrxCallbackPtr callback,const map<string, string>& context = TARS_CONTEXT())
+        {
+            tars::TarsOutputStream<tars::BufferWriterVector> _os;
+            std::map<string, string> _mStatus;
+            tars_invoke_async(tars::TARSNORMAL,"increment", _os, context, _mStatus, callback, true);
+        }
+
         tars::Int32 test(const map<string, string> &context = TARS_CONTEXT(),map<string, string> * pResponseContext = NULL)
         {
             tars::TarsOutputStream<tars::BufferWriterVector> _os;
@@ -214,6 +535,111 @@ namespace TarsCppCIDemo
     {
     public:
         virtual ~Hello(){}
+        virtual tars::Int32 decrement(tars::Int32 &count,tars::TarsCurrentPtr current) = 0;
+        static void async_response_decrement(tars::TarsCurrentPtr current, tars::Int32 _ret, tars::Int32 count)
+        {
+            if (current->getRequestVersion() == TUPVERSION )
+            {
+                UniAttribute<tars::BufferWriterVector, tars::BufferReader>  tarsAttr;
+                tarsAttr.setVersion(current->getRequestVersion());
+                tarsAttr.put("", _ret);
+                tarsAttr.put("tars_ret", _ret);
+                tarsAttr.put("count", count);
+
+                vector<char> sTupResponseBuffer;
+                tarsAttr.encode(sTupResponseBuffer);
+                current->sendResponse(tars::TARSSERVERSUCCESS, sTupResponseBuffer);
+            }
+            else if (current->getRequestVersion() == JSONVERSION)
+            {
+                tars::JsonValueObjPtr _p = new tars::JsonValueObj();
+                _p->value["count"] = tars::JsonOutput::writeJson(count);
+                _p->value["tars_ret"] = tars::JsonOutput::writeJson(_ret);
+                vector<char> sJsonResponseBuffer;
+                tars::TC_Json::writeValue(_p, sJsonResponseBuffer);
+                current->sendResponse(tars::TARSSERVERSUCCESS, sJsonResponseBuffer);
+            }
+            else
+            {
+                tars::TarsOutputStream<tars::BufferWriterVector> _os;
+                _os.write(_ret, 0);
+
+                _os.write(count, 1);
+
+                current->sendResponse(tars::TARSSERVERSUCCESS, _os.getByteBuffer());
+            }
+        }
+
+        virtual tars::Int32 getCount(tars::Int32 &count,tars::TarsCurrentPtr current) = 0;
+        static void async_response_getCount(tars::TarsCurrentPtr current, tars::Int32 _ret, tars::Int32 count)
+        {
+            if (current->getRequestVersion() == TUPVERSION )
+            {
+                UniAttribute<tars::BufferWriterVector, tars::BufferReader>  tarsAttr;
+                tarsAttr.setVersion(current->getRequestVersion());
+                tarsAttr.put("", _ret);
+                tarsAttr.put("tars_ret", _ret);
+                tarsAttr.put("count", count);
+
+                vector<char> sTupResponseBuffer;
+                tarsAttr.encode(sTupResponseBuffer);
+                current->sendResponse(tars::TARSSERVERSUCCESS, sTupResponseBuffer);
+            }
+            else if (current->getRequestVersion() == JSONVERSION)
+            {
+                tars::JsonValueObjPtr _p = new tars::JsonValueObj();
+                _p->value["count"] = tars::JsonOutput::writeJson(count);
+                _p->value["tars_ret"] = tars::JsonOutput::writeJson(_ret);
+                vector<char> sJsonResponseBuffer;
+                tars::TC_Json::writeValue(_p, sJsonResponseBuffer);
+                current->sendResponse(tars::TARSSERVERSUCCESS, sJsonResponseBuffer);
+            }
+            else
+            {
+                tars::TarsOutputStream<tars::BufferWriterVector> _os;
+                _os.write(_ret, 0);
+
+                _os.write(count, 1);
+
+                current->sendResponse(tars::TARSSERVERSUCCESS, _os.getByteBuffer());
+            }
+        }
+
+        virtual tars::Int32 increment(tars::Int32 &count,tars::TarsCurrentPtr current) = 0;
+        static void async_response_increment(tars::TarsCurrentPtr current, tars::Int32 _ret, tars::Int32 count)
+        {
+            if (current->getRequestVersion() == TUPVERSION )
+            {
+                UniAttribute<tars::BufferWriterVector, tars::BufferReader>  tarsAttr;
+                tarsAttr.setVersion(current->getRequestVersion());
+                tarsAttr.put("", _ret);
+                tarsAttr.put("tars_ret", _ret);
+                tarsAttr.put("count", count);
+
+                vector<char> sTupResponseBuffer;
+                tarsAttr.encode(sTupResponseBuffer);
+                current->sendResponse(tars::TARSSERVERSUCCESS, sTupResponseBuffer);
+            }
+            else if (current->getRequestVersion() == JSONVERSION)
+            {
+                tars::JsonValueObjPtr _p = new tars::JsonValueObj();
+                _p->value["count"] = tars::JsonOutput::writeJson(count);
+                _p->value["tars_ret"] = tars::JsonOutput::writeJson(_ret);
+                vector<char> sJsonResponseBuffer;
+                tars::TC_Json::writeValue(_p, sJsonResponseBuffer);
+                current->sendResponse(tars::TARSSERVERSUCCESS, sJsonResponseBuffer);
+            }
+            else
+            {
+                tars::TarsOutputStream<tars::BufferWriterVector> _os;
+                _os.write(_ret, 0);
+
+                _os.write(count, 1);
+
+                current->sendResponse(tars::TARSSERVERSUCCESS, _os.getByteBuffer());
+            }
+        }
+
         virtual tars::Int32 test(tars::TarsCurrentPtr current) = 0;
         static void async_response_test(tars::TarsCurrentPtr current, tars::Int32 _ret)
         {
@@ -250,14 +676,170 @@ namespace TarsCppCIDemo
         {
             static ::std::string __TarsCppCIDemo__Hello_all[]=
             {
+                "decrement",
+                "getCount",
+                "increment",
                 "test"
             };
 
-            pair<string*, string*> r = equal_range(__TarsCppCIDemo__Hello_all, __TarsCppCIDemo__Hello_all+1, _current->getFuncName());
+            pair<string*, string*> r = equal_range(__TarsCppCIDemo__Hello_all, __TarsCppCIDemo__Hello_all+4, _current->getFuncName());
             if(r.first == r.second) return tars::TARSSERVERNOFUNCERR;
             switch(r.first - __TarsCppCIDemo__Hello_all)
             {
                 case 0:
+                {
+                    tars::TarsInputStream<tars::BufferReader> _is;
+                    _is.setBuffer(_current->getRequestBuffer());
+                    tars::Int32 count;
+                    if (_current->getRequestVersion() == TUPVERSION)
+                    {
+                        UniAttribute<tars::BufferWriterVector, tars::BufferReader>  tarsAttr;
+                        tarsAttr.setVersion(_current->getRequestVersion());
+                        tarsAttr.decode(_current->getRequestBuffer());
+                        tarsAttr.getByDefault("count", count, count);
+                    }
+                    else if (_current->getRequestVersion() == JSONVERSION)
+                    {
+                        tars::JsonValueObjPtr _jsonPtr = tars::JsonValueObjPtr::dynamicCast(tars::TC_Json::getValue(_current->getRequestBuffer()));
+                        tars::JsonInput::readJson(count, _jsonPtr->value["count"], false);
+                    }
+                    else
+                    {
+                        _is.read(count, 1, false);
+                    }
+                    tars::Int32 _ret = decrement(count, _current);
+                    if(_current->isResponse())
+                    {
+                        if (_current->getRequestVersion() == TUPVERSION)
+                        {
+                            UniAttribute<tars::BufferWriterVector, tars::BufferReader>  tarsAttr;
+                            tarsAttr.setVersion(_current->getRequestVersion());
+                            tarsAttr.put("", _ret);
+                            tarsAttr.put("tars_ret", _ret);
+                            tarsAttr.put("count", count);
+                            tarsAttr.encode(_sResponseBuffer);
+                        }
+                        else if (_current->getRequestVersion() == JSONVERSION)
+                        {
+                            tars::JsonValueObjPtr _p = new tars::JsonValueObj();
+                            _p->value["count"] = tars::JsonOutput::writeJson(count);
+                            _p->value["tars_ret"] = tars::JsonOutput::writeJson(_ret);
+                            tars::TC_Json::writeValue(_p, _sResponseBuffer);
+                        }
+                        else
+                        {
+                            tars::TarsOutputStream<tars::BufferWriterVector> _os;
+                            _os.write(_ret, 0);
+                            _os.write(count, 1);
+                            _os.swap(_sResponseBuffer);
+                        }
+                    }
+                    return tars::TARSSERVERSUCCESS;
+
+                }
+                case 1:
+                {
+                    tars::TarsInputStream<tars::BufferReader> _is;
+                    _is.setBuffer(_current->getRequestBuffer());
+                    tars::Int32 count;
+                    if (_current->getRequestVersion() == TUPVERSION)
+                    {
+                        UniAttribute<tars::BufferWriterVector, tars::BufferReader>  tarsAttr;
+                        tarsAttr.setVersion(_current->getRequestVersion());
+                        tarsAttr.decode(_current->getRequestBuffer());
+                        tarsAttr.getByDefault("count", count, count);
+                    }
+                    else if (_current->getRequestVersion() == JSONVERSION)
+                    {
+                        tars::JsonValueObjPtr _jsonPtr = tars::JsonValueObjPtr::dynamicCast(tars::TC_Json::getValue(_current->getRequestBuffer()));
+                        tars::JsonInput::readJson(count, _jsonPtr->value["count"], false);
+                    }
+                    else
+                    {
+                        _is.read(count, 1, false);
+                    }
+                    tars::Int32 _ret = getCount(count, _current);
+                    if(_current->isResponse())
+                    {
+                        if (_current->getRequestVersion() == TUPVERSION)
+                        {
+                            UniAttribute<tars::BufferWriterVector, tars::BufferReader>  tarsAttr;
+                            tarsAttr.setVersion(_current->getRequestVersion());
+                            tarsAttr.put("", _ret);
+                            tarsAttr.put("tars_ret", _ret);
+                            tarsAttr.put("count", count);
+                            tarsAttr.encode(_sResponseBuffer);
+                        }
+                        else if (_current->getRequestVersion() == JSONVERSION)
+                        {
+                            tars::JsonValueObjPtr _p = new tars::JsonValueObj();
+                            _p->value["count"] = tars::JsonOutput::writeJson(count);
+                            _p->value["tars_ret"] = tars::JsonOutput::writeJson(_ret);
+                            tars::TC_Json::writeValue(_p, _sResponseBuffer);
+                        }
+                        else
+                        {
+                            tars::TarsOutputStream<tars::BufferWriterVector> _os;
+                            _os.write(_ret, 0);
+                            _os.write(count, 1);
+                            _os.swap(_sResponseBuffer);
+                        }
+                    }
+                    return tars::TARSSERVERSUCCESS;
+
+                }
+                case 2:
+                {
+                    tars::TarsInputStream<tars::BufferReader> _is;
+                    _is.setBuffer(_current->getRequestBuffer());
+                    tars::Int32 count;
+                    if (_current->getRequestVersion() == TUPVERSION)
+                    {
+                        UniAttribute<tars::BufferWriterVector, tars::BufferReader>  tarsAttr;
+                        tarsAttr.setVersion(_current->getRequestVersion());
+                        tarsAttr.decode(_current->getRequestBuffer());
+                        tarsAttr.getByDefault("count", count, count);
+                    }
+                    else if (_current->getRequestVersion() == JSONVERSION)
+                    {
+                        tars::JsonValueObjPtr _jsonPtr = tars::JsonValueObjPtr::dynamicCast(tars::TC_Json::getValue(_current->getRequestBuffer()));
+                        tars::JsonInput::readJson(count, _jsonPtr->value["count"], false);
+                    }
+                    else
+                    {
+                        _is.read(count, 1, false);
+                    }
+                    tars::Int32 _ret = increment(count, _current);
+                    if(_current->isResponse())
+                    {
+                        if (_current->getRequestVersion() == TUPVERSION)
+                        {
+                            UniAttribute<tars::BufferWriterVector, tars::BufferReader>  tarsAttr;
+                            tarsAttr.setVersion(_current->getRequestVersion());
+                            tarsAttr.put("", _ret);
+                            tarsAttr.put("tars_ret", _ret);
+                            tarsAttr.put("count", count);
+                            tarsAttr.encode(_sResponseBuffer);
+                        }
+                        else if (_current->getRequestVersion() == JSONVERSION)
+                        {
+                            tars::JsonValueObjPtr _p = new tars::JsonValueObj();
+                            _p->value["count"] = tars::JsonOutput::writeJson(count);
+                            _p->value["tars_ret"] = tars::JsonOutput::writeJson(_ret);
+                            tars::TC_Json::writeValue(_p, _sResponseBuffer);
+                        }
+                        else
+                        {
+                            tars::TarsOutputStream<tars::BufferWriterVector> _os;
+                            _os.write(_ret, 0);
+                            _os.write(count, 1);
+                            _os.swap(_sResponseBuffer);
+                        }
+                    }
+                    return tars::TARSSERVERSUCCESS;
+
+                }
+                case 3:
                 {
                     tars::TarsInputStream<tars::BufferReader> _is;
                     _is.setBuffer(_current->getRequestBuffer());
