@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 2.8)
 find_package(GTest REQUIRED)
 
 set(TARS_INC "/usr/local/tars/cpp/include")
@@ -19,4 +20,5 @@ target_link_libraries( app_ut
         ${GTEST_BOTH_LIBRARIES}
         pthread )
 
-gtest_discover_tests(app_ut)
+gtest_discover_tests(app_ut
+                     XML_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/build/test_result" )
