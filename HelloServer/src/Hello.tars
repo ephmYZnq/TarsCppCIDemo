@@ -5,6 +5,9 @@ module TarsCppCIDemo
 interface Hello
 {
     int test();
+    int increment(out int count);
+    int decrement(out int count);
+    int getCount(out int count);
 };
 
 }; 
